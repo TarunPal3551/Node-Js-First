@@ -6,7 +6,12 @@ const mongoose=require('mongoose');
 const app=express();
 const productRoutes=require('./api/routes/products');
 const orderRoutes=require('./api/routes/orders');
-mongoose.connect('mongodb+srv://admin:<admin>@firstnode-ijo0j.mongodb.net/test?retryWrites=true&w=majority')
+mongoose.connect('mongodb+srv://admin:'+ process.env.MONGO_ATLAS_PW+'@firstnode-ijo0j.mongodb.net/test?retryWrites=true&w=majority',({
+
+useMongoClient :true,
+useNewUrlParser:true
+}));
+
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended:false}));
 app.use(bodyParser.json());
