@@ -86,7 +86,7 @@ router.get('/:productId',(req,res,next)=>{
         });
 router.patch('/:productId',(req,res,next)=>{
             res.status(200).json({
-                message:'Handling PATCH Request to /productId',
+                message:'Handling PATCH Request to /productId'
                
                 
                 });
@@ -96,7 +96,7 @@ router.patch('/:productId',(req,res,next)=>{
 router.delete('/:productId',(req,res,next)=>{
 const id=req.param.productId;
 
-    Product.deleteOne({ _id:id,function (err, result)})
+    Product.deleteOne({ _id:id})
     .exec().then(
         result=>{
         console.log(result); 
