@@ -4,9 +4,19 @@ const mongoose=require('mongoose');
 const Product=require('../models/product');
 
 router.get('/',(req,res,next)=>{
-res.status(200).json({
-message:'Handling GET Request to /products'
-});
+    Product.find().exec().then(docs=>{
+console.log(docs);
+res.status(200).json(docs);
+
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).json
+        {
+            message:'500 Internal Server Error'
+
+        }
+    })
+
 
 });
 router.post('/',(req,res,next)=>{
@@ -21,7 +31,7 @@ router.post('/',(req,res,next)=>{
         res.status(201).json({
     
             message:'Handling POST Request to /products',
-            createdProduct:product
+            createdProduct:result
             
             });
     }).catch(err=>{console.log(err); 
@@ -37,7 +47,16 @@ router.get('/:productId',(req,res,next)=>{
         Product.findById(id).exec().then(
             doc=>{
                 console.log("From Database",doc);
-                res.status(200).json(doc);
+                if(doc){
+                    res.status(200).json(doc);
+                }
+                else{
+                    res.status(404).json({
+                        message:'Not Valid Entry Found',
+                        status:404
+                    });
+                }
+                
             }
         ).catch(err=>{console.log(err);
         res.status(500).json({
@@ -75,13 +94,24 @@ router.patch('/:productId',(req,res,next)=>{
             
             });
 router.delete('/:productId',(req,res,next)=>{
-                res.status(200).json({
-                    message:'Handling DELETE Request to /productId',
+const id=req.param.productId;
+
+    Product.deleteOne({ _id:id,function (err, result)})
+    .exec().then(
+        result=>{
+        console.log(result); 
+        res.status(200).json(result);
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).json({
+           error:err
+        });
+
+    });
+                // res.status(200).json({
+                //     message:'Handling DELETE Request to /productId',
                 
                     
-                    });
-                
-        
-            
-            });
+                //     });
+ });
 module.exports=router;
