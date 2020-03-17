@@ -85,18 +85,45 @@ router.get('/:productId',(req,res,next)=>{
         
         });
 router.patch('/:productId',(req,res,next)=>{
-            res.status(200).json({
-                message:'Handling PATCH Request to /productId'
+            // res.status(200).json({
+            //     message:'Handling PATCH Request to /productId'
                
                 
-                });
-            
-            
+            //     });
+
+            const id=req.param.productId;
+            const updateOps={};
+            for(const ops of req.body){
+                updateOps[ops.propName]=ops.value;
+            }
+            Product.findByIdAndUpdate(id,{$set: updateOps}).exec().then(result=>{
+                console.log(result); 
+        res.status(200).json(result);
+
+
+            }).catch(err=>{
+                console.log(err);
+                res.status(500).json({
+                   error:err
+                });    
             });
+            
+        });
+        router.put('/:productId', (req, res) => {
+            Product.findByIdAndUpdate(req.params.id, req.body.name, (err, user) => {
+                if (err) {
+                    return res
+                        .status(500)
+                        .send({error: "unsuccessful"})
+                };
+                res.send({success: "success"});
+            });
+        
+        });
 router.delete('/:productId',(req,res,next)=>{
 const id=req.param.productId;
-
-    Product.deleteOne({ _id:id})
+////Get Solution after searching statOverflow and hit and trial of defined methods
+    Product.deleteOne(id)
     .exec().then(
         result=>{
         console.log(result); 
