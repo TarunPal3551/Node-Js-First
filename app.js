@@ -10,12 +10,14 @@ mongoose.connect('mongodb+srv://admin:'+ process.env.MONGO_ATLAS_PW+'@firstnode-
 
 useNewUrlParser:true,
 useUnifiedTopology: true,
-useFindAndModify:true
+useFindAndModify:false
 }));
-
+mongoose.Promise=global.Promise;
 app.use(morgan('dev'));
+app.use('/uploads',express.static('uploads')); '/uploads',
 app.use(bodyParser.urlencoded({ extended:false}));
 app.use(bodyParser.json());
+
 
 app.use((req,res,next)=>{
     res.header("Access-Control-Allow-Origin","*"); 
